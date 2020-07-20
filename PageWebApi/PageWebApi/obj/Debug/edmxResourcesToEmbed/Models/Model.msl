@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="PageModelStoreContainer" CdmEntityContainer="PageEntities">
+    <EntitySetMapping Name="Student">
+      <EntityTypeMapping TypeName="PageModel.Student">
+        <MappingFragment StoreEntitySet="Student">
+          <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+          <ScalarProperty Name="IndeksBroj" ColumnName="IndeksBroj" />
+          <ScalarProperty Name="Ime" ColumnName="Ime" />
+          <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+          <ScalarProperty Name="Godina" ColumnName="Godina" />
+          <ScalarProperty Name="StudentStatusId" ColumnName="StudentStatusId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StudentStatus">
+      <EntityTypeMapping TypeName="PageModel.StudentStatus">
+        <MappingFragment StoreEntitySet="StudentStatus">
+          <ScalarProperty Name="StudentStatusId" ColumnName="StudentStatusId" />
+          <ScalarProperty Name="StatusNaziv" ColumnName="StatusNaziv" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Get_All_Students" FunctionName="PageModel.Store.Get_All_Students">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PageModel.Get_All_Students_Result">
+          <ScalarProperty Name="IndeksBroj" ColumnName="IndeksBroj" />
+          <ScalarProperty Name="Ime" ColumnName="Ime" />
+          <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+          <ScalarProperty Name="Godina" ColumnName="Godina" />
+          <ScalarProperty Name="StudentStatusId" ColumnName="StudentStatusId" />
+          <ScalarProperty Name="StatusNaziv" ColumnName="StatusNaziv" />
+          <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="Korisnik">
+      <EntityTypeMapping TypeName="PageModel.Korisnik">
+        <MappingFragment StoreEntitySet="Korisnik">
+          <ScalarProperty Name="Sifra" ColumnName="Sifra" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Ime" ColumnName="Ime" />
+          <ScalarProperty Name="KorisnikId" ColumnName="KorisnikId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Kurs">
+      <EntityTypeMapping TypeName="PageModel.Kurs">
+        <MappingFragment StoreEntitySet="Kurs">
+          <ScalarProperty Name="KursNaziv" ColumnName="KursNaziv" />
+          <ScalarProperty Name="KursId" ColumnName="KursId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="KursStudent" TypeName="PageModel.KursStudent" StoreEntitySet="KursStudent">
+      <EndProperty Name="Student">
+        <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+      </EndProperty>
+      <EndProperty Name="Kurs">
+        <ScalarProperty Name="KursId" ColumnName="KursId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <FunctionImportMapping FunctionImportName="getAllStudentsOnKurs" FunctionName="PageModel.Store.getAllStudentsOnKurs">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PageModel.getAllStudentsOnKurs_Result">
+          <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+          <ScalarProperty Name="Ime" ColumnName="Ime" />
+          <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="getAllKursOnStudent" FunctionName="PageModel.Store.getAllKursOnStudent">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PageModel.getAllKursOnStudent_Result">
+          <ScalarProperty Name="KursId" ColumnName="KursId" />
+          <ScalarProperty Name="KursNaziv" ColumnName="KursNaziv" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

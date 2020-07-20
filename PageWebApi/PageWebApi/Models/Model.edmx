@@ -1,0 +1,314 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PageModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Korisnik">
+          <Key>
+            <PropertyRef Name="Sifra" />
+          </Key>
+          <Property Name="KorisnikId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ime" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="35" Nullable="false" />
+          <Property Name="Sifra" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Kurs">
+          <Key>
+            <PropertyRef Name="KursId" />
+          </Key>
+          <Property Name="KursId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KursNaziv" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="KursStudent">
+          <Key>
+            <PropertyRef Name="KursId" />
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="KursId" Type="int" Nullable="false" />
+          <Property Name="StudentId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="StudentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IndeksBroj" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Ime" Type="nvarchar" MaxLength="20" />
+          <Property Name="Prezime" Type="nvarchar" MaxLength="20" />
+          <Property Name="Godina" Type="nvarchar" MaxLength="20" />
+          <Property Name="StudentStatusId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StudentStatus">
+          <Key>
+            <PropertyRef Name="StudentStatusId" />
+          </Key>
+          <Property Name="StudentStatusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatusNaziv" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Kurs_Student">
+          <End Role="Kurs" Type="Self.Kurs" Multiplicity="1" />
+          <End Role="KursStudent" Type="Self.KursStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kurs">
+              <PropertyRef Name="KursId" />
+            </Principal>
+            <Dependent Role="KursStudent">
+              <PropertyRef Name="KursId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Student_Kurs">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="KursStudent" Type="Self.KursStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="KursStudent">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentStatus">
+          <End Role="StudentStatus" Type="Self.StudentStatus" Multiplicity="1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudentStatus">
+              <PropertyRef Name="StudentStatusId" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="StudentStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Get_All_Students" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="getAllKursOnStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StudentId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getAllStudentsOnKurs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="KursId" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="PageModelStoreContainer">
+          <EntitySet Name="Korisnik" EntityType="Self.Korisnik" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kurs" EntityType="Self.Kurs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KursStudent" EntityType="Self.KursStudent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StudentStatus" EntityType="Self.StudentStatus" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Kurs_Student" Association="Self.FK_Kurs_Student">
+            <End Role="Kurs" EntitySet="Kurs" />
+            <End Role="KursStudent" EntitySet="KursStudent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Student_Kurs" Association="Self.FK_Student_Kurs">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="KursStudent" EntitySet="KursStudent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentStatus" Association="Self.FK_StudentStatus">
+            <End Role="StudentStatus" EntitySet="StudentStatus" />
+            <End Role="Student" EntitySet="Student" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PageModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="StudentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IndeksBroj" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Ime" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Prezime" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Godina" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="StudentStatusId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="StudentStatus" Relationship="Self.FK_StudentStatus" FromRole="Student" ToRole="StudentStatus" />
+          <NavigationProperty Name="Kurs" Relationship="PageModel.KursStudent" FromRole="Student" ToRole="Kurs" />
+        </EntityType>
+        <EntityType Name="StudentStatus">
+          <Key>
+            <PropertyRef Name="StudentStatusId" />
+          </Key>
+          <Property Name="StudentStatusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusNaziv" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Student" Relationship="Self.FK_StudentStatus" FromRole="StudentStatus" ToRole="Student" />
+        </EntityType>
+        <Association Name="FK_StudentStatus">
+          <End Role="StudentStatus" Type="Self.StudentStatus" Multiplicity="1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudentStatus">
+              <PropertyRef Name="StudentStatusId" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="StudentStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PageEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Student" EntityType="Self.Student" />
+          <EntitySet Name="StudentStatus" EntityType="Self.StudentStatus" />
+          <AssociationSet Name="FK_StudentStatus" Association="Self.FK_StudentStatus">
+            <End Role="StudentStatus" EntitySet="StudentStatus" />
+            <End Role="Student" EntitySet="Student" />
+          </AssociationSet>
+          <FunctionImport Name="Get_All_Students" ReturnType="Collection(PageModel.Get_All_Students_Result)" />
+          <EntitySet Name="Korisnik" EntityType="PageModel.Korisnik" />
+          <EntitySet Name="Kurs" EntityType="PageModel.Kurs" />
+          <AssociationSet Name="KursStudent" Association="PageModel.KursStudent">
+            <End Role="Kurs" EntitySet="Kurs" />
+            <End Role="Student" EntitySet="Student" />
+          </AssociationSet>
+          <FunctionImport Name="getAllStudentsOnKurs" ReturnType="Collection(PageModel.getAllStudentsOnKurs_Result)">
+          <Parameter Name="KursId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getAllKursOnStudent" ReturnType="Collection(PageModel.getAllKursOnStudent_Result)">
+            <Parameter Name="StudentId" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="Korisnik">
+          <Key>
+            <PropertyRef Name="Sifra" />
+          </Key>
+          <Property Name="KorisnikId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="35" FixedLength="false" Unicode="true" />
+          <Property Name="Sifra" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <ComplexType Name="Get_All_Students_Result">
+          <Property Type="String" Name="IndeksBroj" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Ime" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Prezime" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Godina" Nullable="false" MaxLength="20" />
+          <Property Type="Int32" Name="StudentStatusId" Nullable="false" />
+          <Property Type="String" Name="StatusNaziv" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="StudentId" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="Kurs">
+          <Key>
+            <PropertyRef Name="KursId" />
+          </Key>
+          <Property Name="KursId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KursNaziv" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Student" Relationship="PageModel.KursStudent" FromRole="Kurs" ToRole="Student" />
+        </EntityType>
+        <Association Name="KursStudent">
+          <End Type="PageModel.Kurs" Role="Kurs" Multiplicity="*" />
+          <End Type="PageModel.Student" Role="Student" Multiplicity="*" />
+        </Association>
+        <ComplexType Name="getAllStudentsOnKurs_Result">
+          <Property Type="Int32" Name="StudentId" Nullable="false" />
+          <Property Type="String" Name="Ime" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Prezime" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="getAllKursOnStudent_Result">
+          <Property Type="Int32" Name="KursId" Nullable="false" />
+          <Property Type="String" Name="KursNaziv" Nullable="false" MaxLength="30" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PageModelStoreContainer" CdmEntityContainer="PageEntities">
+          <EntitySetMapping Name="Student">
+            <EntityTypeMapping TypeName="PageModel.Student">
+              <MappingFragment StoreEntitySet="Student">
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="IndeksBroj" ColumnName="IndeksBroj" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+                <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+                <ScalarProperty Name="Godina" ColumnName="Godina" />
+                <ScalarProperty Name="StudentStatusId" ColumnName="StudentStatusId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StudentStatus">
+            <EntityTypeMapping TypeName="PageModel.StudentStatus">
+              <MappingFragment StoreEntitySet="StudentStatus">
+                <ScalarProperty Name="StudentStatusId" ColumnName="StudentStatusId" />
+                <ScalarProperty Name="StatusNaziv" ColumnName="StatusNaziv" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Get_All_Students" FunctionName="PageModel.Store.Get_All_Students">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PageModel.Get_All_Students_Result">
+                <ScalarProperty Name="IndeksBroj" ColumnName="IndeksBroj" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+                <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+                <ScalarProperty Name="Godina" ColumnName="Godina" />
+                <ScalarProperty Name="StudentStatusId" ColumnName="StudentStatusId" />
+                <ScalarProperty Name="StatusNaziv" ColumnName="StatusNaziv" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Korisnik">
+            <EntityTypeMapping TypeName="PageModel.Korisnik">
+              <MappingFragment StoreEntitySet="Korisnik">
+                <ScalarProperty Name="Sifra" ColumnName="Sifra" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+                <ScalarProperty Name="KorisnikId" ColumnName="KorisnikId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kurs">
+            <EntityTypeMapping TypeName="PageModel.Kurs">
+              <MappingFragment StoreEntitySet="Kurs">
+                <ScalarProperty Name="KursNaziv" ColumnName="KursNaziv" />
+                <ScalarProperty Name="KursId" ColumnName="KursId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="KursStudent" TypeName="PageModel.KursStudent" StoreEntitySet="KursStudent">
+            <EndProperty Name="Student">
+              <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+            </EndProperty>
+            <EndProperty Name="Kurs">
+              <ScalarProperty Name="KursId" ColumnName="KursId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="getAllStudentsOnKurs" FunctionName="PageModel.Store.getAllStudentsOnKurs">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PageModel.getAllStudentsOnKurs_Result">
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+                <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getAllKursOnStudent" FunctionName="PageModel.Store.getAllKursOnStudent">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PageModel.getAllKursOnStudent_Result">
+                <ScalarProperty Name="KursId" ColumnName="KursId" />
+                <ScalarProperty Name="KursNaziv" ColumnName="KursNaziv" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

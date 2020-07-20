@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PageModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Student">
+    <Key>
+      <PropertyRef Name="StudentId" />
+    </Key>
+    <Property Name="StudentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IndeksBroj" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Ime" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Prezime" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Godina" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="StudentStatusId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="StudentStatus" Relationship="Self.FK_StudentStatus" FromRole="Student" ToRole="StudentStatus" />
+    <NavigationProperty Name="Kurs" Relationship="PageModel.KursStudent" FromRole="Student" ToRole="Kurs" />
+  </EntityType>
+  <EntityType Name="StudentStatus">
+    <Key>
+      <PropertyRef Name="StudentStatusId" />
+    </Key>
+    <Property Name="StudentStatusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StatusNaziv" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Student" Relationship="Self.FK_StudentStatus" FromRole="StudentStatus" ToRole="Student" />
+  </EntityType>
+  <Association Name="FK_StudentStatus">
+    <End Role="StudentStatus" Type="Self.StudentStatus" Multiplicity="1" />
+    <End Role="Student" Type="Self.Student" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StudentStatus">
+        <PropertyRef Name="StudentStatusId" />
+      </Principal>
+      <Dependent Role="Student">
+        <PropertyRef Name="StudentStatusId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PageEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Student" EntityType="Self.Student" />
+    <EntitySet Name="StudentStatus" EntityType="Self.StudentStatus" />
+    <AssociationSet Name="FK_StudentStatus" Association="Self.FK_StudentStatus">
+      <End Role="StudentStatus" EntitySet="StudentStatus" />
+      <End Role="Student" EntitySet="Student" />
+    </AssociationSet>
+    <FunctionImport Name="Get_All_Students" ReturnType="Collection(PageModel.Get_All_Students_Result)" />
+    <EntitySet Name="Korisnik" EntityType="PageModel.Korisnik" />
+    <EntitySet Name="Kurs" EntityType="PageModel.Kurs" />
+    <AssociationSet Name="KursStudent" Association="PageModel.KursStudent">
+      <End Role="Kurs" EntitySet="Kurs" />
+      <End Role="Student" EntitySet="Student" />
+    </AssociationSet>
+    <FunctionImport Name="getAllStudentsOnKurs" ReturnType="Collection(PageModel.getAllStudentsOnKurs_Result)">
+      <Parameter Name="KursId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="getAllKursOnStudent" ReturnType="Collection(PageModel.getAllKursOnStudent_Result)">
+      <Parameter Name="StudentId" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <EntityType Name="Korisnik">
+    <Key>
+      <PropertyRef Name="Sifra" />
+    </Key>
+    <Property Name="KorisnikId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Ime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="35" FixedLength="false" Unicode="true" />
+    <Property Name="Sifra" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <ComplexType Name="Get_All_Students_Result">
+    <Property Type="String" Name="IndeksBroj" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Ime" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Prezime" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Godina" Nullable="false" MaxLength="20" />
+    <Property Type="Int32" Name="StudentStatusId" Nullable="false" />
+    <Property Type="String" Name="StatusNaziv" Nullable="false" MaxLength="10" />
+    <Property Type="Int32" Name="StudentId" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="Kurs">
+    <Key>
+      <PropertyRef Name="KursId" />
+    </Key>
+    <Property Name="KursId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="KursNaziv" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Student" Relationship="PageModel.KursStudent" FromRole="Kurs" ToRole="Student" />
+  </EntityType>
+  <Association Name="KursStudent">
+    <End Type="PageModel.Kurs" Role="Kurs" Multiplicity="*" />
+    <End Type="PageModel.Student" Role="Student" Multiplicity="*" />
+  </Association>
+  <ComplexType Name="getAllStudentsOnKurs_Result">
+    <Property Type="Int32" Name="StudentId" Nullable="false" />
+    <Property Type="String" Name="Ime" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Prezime" Nullable="true" MaxLength="20" />
+  </ComplexType>
+  <ComplexType Name="getAllKursOnStudent_Result">
+    <Property Type="Int32" Name="KursId" Nullable="false" />
+    <Property Type="String" Name="KursNaziv" Nullable="false" MaxLength="30" />
+  </ComplexType>
+</Schema>

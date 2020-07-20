@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PageModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Korisnik">
+    <Key>
+      <PropertyRef Name="Sifra" />
+    </Key>
+    <Property Name="KorisnikId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Ime" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="35" Nullable="false" />
+    <Property Name="Sifra" Type="nvarchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Kurs">
+    <Key>
+      <PropertyRef Name="KursId" />
+    </Key>
+    <Property Name="KursId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KursNaziv" Type="nvarchar" MaxLength="30" Nullable="false" />
+  </EntityType>
+  <EntityType Name="KursStudent">
+    <Key>
+      <PropertyRef Name="KursId" />
+      <PropertyRef Name="StudentId" />
+    </Key>
+    <Property Name="KursId" Type="int" Nullable="false" />
+    <Property Name="StudentId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Student">
+    <Key>
+      <PropertyRef Name="StudentId" />
+    </Key>
+    <Property Name="StudentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IndeksBroj" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Ime" Type="nvarchar" MaxLength="20" />
+    <Property Name="Prezime" Type="nvarchar" MaxLength="20" />
+    <Property Name="Godina" Type="nvarchar" MaxLength="20" />
+    <Property Name="StudentStatusId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="StudentStatus">
+    <Key>
+      <PropertyRef Name="StudentStatusId" />
+    </Key>
+    <Property Name="StudentStatusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StatusNaziv" Type="nvarchar" MaxLength="10" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Kurs_Student">
+    <End Role="Kurs" Type="Self.Kurs" Multiplicity="1" />
+    <End Role="KursStudent" Type="Self.KursStudent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kurs">
+        <PropertyRef Name="KursId" />
+      </Principal>
+      <Dependent Role="KursStudent">
+        <PropertyRef Name="KursId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Student_Kurs">
+    <End Role="Student" Type="Self.Student" Multiplicity="1" />
+    <End Role="KursStudent" Type="Self.KursStudent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
+        <PropertyRef Name="StudentId" />
+      </Principal>
+      <Dependent Role="KursStudent">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StudentStatus">
+    <End Role="StudentStatus" Type="Self.StudentStatus" Multiplicity="1" />
+    <End Role="Student" Type="Self.Student" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StudentStatus">
+        <PropertyRef Name="StudentStatusId" />
+      </Principal>
+      <Dependent Role="Student">
+        <PropertyRef Name="StudentStatusId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="Get_All_Students" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="getAllKursOnStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="StudentId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="getAllStudentsOnKurs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="KursId" Type="int" Mode="In" />
+  </Function>
+  <EntityContainer Name="PageModelStoreContainer">
+    <EntitySet Name="Korisnik" EntityType="Self.Korisnik" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Kurs" EntityType="Self.Kurs" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="KursStudent" EntityType="Self.KursStudent" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="StudentStatus" EntityType="Self.StudentStatus" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Kurs_Student" Association="Self.FK_Kurs_Student">
+      <End Role="Kurs" EntitySet="Kurs" />
+      <End Role="KursStudent" EntitySet="KursStudent" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Student_Kurs" Association="Self.FK_Student_Kurs">
+      <End Role="Student" EntitySet="Student" />
+      <End Role="KursStudent" EntitySet="KursStudent" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StudentStatus" Association="Self.FK_StudentStatus">
+      <End Role="StudentStatus" EntitySet="StudentStatus" />
+      <End Role="Student" EntitySet="Student" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

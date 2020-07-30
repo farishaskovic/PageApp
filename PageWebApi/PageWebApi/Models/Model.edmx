@@ -7,7 +7,7 @@
     <Schema Namespace="PageModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Korisnik">
           <Key>
-            <PropertyRef Name="Sifra" />
+            <PropertyRef Name="KorisnikId" />
           </Key>
           <Property Name="KorisnikId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Ime" Type="nvarchar" MaxLength="20" Nullable="false" />
@@ -164,12 +164,12 @@
           <Parameter Name="KursId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="getAllKursOnStudent" ReturnType="Collection(PageModel.getAllKursOnStudent_Result)">
-            <Parameter Name="StudentId" Mode="In" Type="Int32" />
+          <Parameter Name="StudentId" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Korisnik">
           <Key>
-            <PropertyRef Name="Sifra" />
+            <PropertyRef Name="KorisnikId" />
           </Key>
           <Property Name="KorisnikId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Ime" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
